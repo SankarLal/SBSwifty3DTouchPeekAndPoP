@@ -9,29 +9,26 @@ class SBSwifty3DTouchButtonViewController: UIViewController,UIViewControllerPrev
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         self.title = "SBSwifty3DTouch Button"
         
-        
-        peekButton = UIButton (frame: CGRectMake(30, self.view.bounds.size.height/2 - 50, self.view.bounds.size.width - 60, 100))
-        peekButton.setTitle("Peek Button", forState: .Normal)
-        peekButton.backgroundColor = UIColor.blueColor()
-        peekButton.addTarget(self, action: "performPeekButton", forControlEvents: .TouchUpInside)
+        peekButton = UIButton.init(frame: CGRect.init(x: 30, y: self.view.bounds.size.height/2 - 50, width: self.view.bounds.size.width - 60, height: 100))
+        peekButton.setTitle("Peek Button", for: .normal)
+        peekButton.backgroundColor = UIColor.blue
+        peekButton.addTarget(self, action: #selector(self.performPeekButton), for: .touchUpInside)
         self.view.addSubview(peekButton)
         
-        if (traitCollection.forceTouchCapability == .Available) {
-            self.registerForPreviewingWithDelegate(self, sourceView: self.view)
+        if (traitCollection.forceTouchCapability == .available) {
+            self.registerForPreviewing(with: self, sourceView: self.view)
         }
     }
 
-    func performPeekButton () {
+    @objc func performPeekButton () {
         self.navigationController?.pushViewController(SBSwifty3DTouchDetailViewController(), animated: true)
-
-
     }
     
     // MARK: Previewing Delegate Functions
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         previewingContext.sourceRect = peekButton.frame
         let viewController = SBSwifty3DTouchDetailViewController ()
@@ -40,9 +37,8 @@ class SBSwifty3DTouchButtonViewController: UIViewController,UIViewControllerPrev
         return NaviController
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        
-        self.showViewController(viewControllerToCommit, sender: self)
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        self.show(viewControllerToCommit, sender: self)
         
     }
 

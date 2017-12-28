@@ -9,7 +9,7 @@ class SBSwifty3DTouchPreviewingController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         self.title = "SBSwifty3DTouch Previewing"
         setUpUserInterface()
 
@@ -17,30 +17,27 @@ class SBSwifty3DTouchPreviewingController: UIViewController {
     
     func setUpUserInterface () {
         
-        let previewingButton = UIButton (frame: CGRectMake(30, self.view.bounds.size.height/2 - 200, self.view.bounds.size.width - 60, 100))
-        previewingButton.setTitle("Previewing In Button", forState: .Normal)
-        previewingButton.backgroundColor = UIColor.purpleColor()
-        previewingButton.addTarget(self, action: "performPreviewingButton", forControlEvents: .TouchUpInside)
+        let previewingButton = UIButton.init(frame: CGRect.init(x: 30, y: self.view.bounds.size.height/2 - 200, width: self.view.bounds.size.width - 60, height: 100))
+        previewingButton.setTitle("Previewing In Button", for: .normal)
+        previewingButton.backgroundColor = UIColor.purple
+        previewingButton.addTarget(self, action: #selector(self.performPreviewingButton), for: .touchUpInside)
         self.view.addSubview(previewingButton)
         
-        let previewingTblViewButton = UIButton (frame: CGRectMake(30, self.view.bounds.size.height - 200, self.view.bounds.size.width - 60, 100))
-        previewingTblViewButton.setTitle("Previewing In TableView", forState: .Normal)
-        previewingTblViewButton.backgroundColor = UIColor.purpleColor()
-        previewingTblViewButton.addTarget(self, action: "performPreviewingTableViewButton", forControlEvents: .TouchUpInside)
+        let previewingTblViewButton = UIButton.init(frame: CGRect.init(x: 30, y: self.view.bounds.size.height - 200, width: self.view.bounds.size.width - 60, height: 100))
+
+        previewingTblViewButton.setTitle("Previewing In TableView", for: .normal)
+        previewingTblViewButton.backgroundColor = UIColor.purple
+        previewingTblViewButton.addTarget(self, action: #selector(self.performPreviewingTableViewButton), for: .touchUpInside)
         self.view.addSubview(previewingTblViewButton)
         
     }
     
-    func performPreviewingButton () {
-        
+    @objc func performPreviewingButton () {
         self.navigationController?.pushViewController(SBSwifty3DTouchButtonViewController(), animated: true)
-        
     }
 
-    func performPreviewingTableViewButton () {
-        
+    @objc func performPreviewingTableViewButton () {
         self.navigationController?.pushViewController(SBSwifty3DTouchTableViewController(), animated: true)
-        
     }
     
     override func didReceiveMemoryWarning() {

@@ -10,108 +10,88 @@ class SBSwifty3DTouchTableViewController: UIViewController, UITableViewDelegate,
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         self.title = "SBSwifty3DTouch TableView"
         setUpUserInterface()
 
-        if (traitCollection.forceTouchCapability == .Available) {
-            self.registerForPreviewingWithDelegate(self, sourceView: self.view)
+        if (traitCollection.forceTouchCapability == .available) {
+            self.registerForPreviewing(with: self, sourceView: self.view)
         }
     }
     
     func setUpUserInterface () {
-        
-     
-        tblView = UITableView (frame: CGRectMake(5, 5, self.view.frame.size.width - 10, self.view.frame.size.height - 10), style: .Plain)
+        tblView = UITableView.init(frame: CGRect.init(x: 5, y: 5, width: self.view.frame.size.width - 10, height: self.view.frame.size.height - 10))
         tblView.delegate = self
         tblView.dataSource = self
         tblView.showsVerticalScrollIndicator = false
-        tblView.backgroundColor = UIColor.clearColor()
-        tblView.separatorColor = UIColor.blackColor()
-        tblView.tableHeaderView?.userInteractionEnabled = true
-        tblView.tableFooterView = UIView(frame: CGRectZero)
-        if tblView.respondsToSelector("setSeparatorInset:") {
-            tblView.separatorInset = UIEdgeInsetsZero
-            
-        }
-
+        tblView.backgroundColor = UIColor.clear
+        tblView.separatorColor = UIColor.black
+        tblView.tableHeaderView?.isUserInteractionEnabled = true
+        tblView.tableFooterView = UIView()
+        tblView.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "CELL-IDENTIFIER")
+//        if tblView.respondsToSelector("setSeparatorInset:") {
+//            tblView.separatorInset = UIEdgeInsetsZero
+//
+//        }
         self.view.addSubview(tblView)
-        
-        
     }
 
     // MARK: TableView Delegate And DataSource Functions
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
+//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+//        // Remove seperator inset
+//        if cell.respondsToSelector("setSeparatorInset:") {
+//            cell.separatorInset = UIEdgeInsetsZero
+//        }
+//        // Prevent the cell from inheriting the Table View's margin settings
+//        if cell.respondsToSelector("setPreservesSuperviewLayoutMargins:") {
+//            cell.preservesSuperviewLayoutMargins = false
+//        }
+//
+//        // Explictly set your cell's layout margins
+//        if cell.respondsToSelector("setLayoutMargins:") {
+//            cell.layoutMargins = UIEdgeInsetsZero
+//        }
+//
+//    }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        // Remove seperator inset
-        if cell.respondsToSelector("setSeparatorInset:") {
-            cell.separatorInset = UIEdgeInsetsZero
-        }
-        // Prevent the cell from inheriting the Table View's margin settings
-        if cell.respondsToSelector("setPreservesSuperviewLayoutMargins:") {
-            cell.preservesSuperviewLayoutMargins = false
-        }
-        
-        // Explictly set your cell's layout margins
-        if cell.respondsToSelector("setLayoutMargins:") {
-            cell.layoutMargins = UIEdgeInsetsZero
-        }
-        
-    }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-       
-        let cellIdentifier = "CELL-IDENTIFIER"
-        var cell: UITableViewCell? = tableView.dequeueReusableCellWithIdentifier(cellIdentifier)
-        
-        if cell == nil {
-            
-            cell = UITableViewCell (style: UITableViewCellStyle.Value1, reuseIdentifier: cellIdentifier)
-            cell?.backgroundColor = UIColor.clearColor()
-            cell?.selectionStyle = UITableViewCellSelectionStyle.Blue
-            
-        }
-       
-        cell?.textLabel?.text = "IndexPath \(indexPath.row)"
-        
-        
-        return cell!
-
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "CELL-IDENTIFIER", for: indexPath)
+        cell.backgroundColor = UIColor.clear
+        cell.selectionStyle = .blue
+        cell.textLabel?.text = "IndexPath \(indexPath.row)"
+        return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.navigationController?.pushViewController(SBSwifty3DTouchDetailViewController(), animated: true)
-
     }
-    
+
     // MARK: Previewing Delegate Functions
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
-        let indexPath : NSIndexPath = tblView.indexPathForRowAtPoint(location)!      
-        previewingContext.sourceRect = tblView .rectForRowAtIndexPath(indexPath)
+        let indexPath : NSIndexPath = tblView.indexPathForRow(at: location)! as NSIndexPath
+        previewingContext.sourceRect = tblView .rectForRow(at: indexPath as IndexPath)
         let viewController = SBSwifty3DTouchDetailViewController ()
         viewController.setUpBackBarButton()
         let NaviController : UINavigationController  =  UINavigationController(rootViewController: viewController)
         return NaviController
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        self.showViewController(viewControllerToCommit, sender: self)
-
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        self.show(viewControllerToCommit, sender: self)
     }
     
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -9,19 +9,19 @@ class SBSwifty3DTouchDetailViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
         self.title = "SBSwifty3DTouch Detail"
 
     }
 
     func setUpBackBarButton () {
 
-        let backBarButton : UIBarButtonItem = UIBarButtonItem (title: "Back", style: .Plain, target: self, action: "peformBackBarButton")
+        let backBarButton : UIBarButtonItem = UIBarButtonItem (title: "Back", style: .plain, target: self, action: #selector(self.peformBackBarButton))
         self.navigationItem.leftBarButtonItem = backBarButton
     }
     
-    func peformBackBarButton () {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @objc func peformBackBarButton () {
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
